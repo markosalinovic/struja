@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Files</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        tr.hover-row:hover {
+            border: 2px solid #cbd5e0; /* Tailwind color gray-300 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <img src="https://www.bug.hr/img/domaci-telekomi-omogucit-ce-hrt2-uhd-na-svojim-iptv-platformama_QZik1l.jpeg" alt="" srcset="">
+    <h2 class="text-2xl font-semibold mb-4">List of Files</h2>
+
+    <div class="overflow-x-auto">
+        
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-200 text-xs">
+                <tr>
+                    <th class="py-2 px-4 text-left">#</th>
+                    <th class="py-2 px-4 text-left">File Name</th>
+                    <th class="py-2 px-4 text-left">Last Modified</th>
+                    <th class="py-2 px-4 text-left">Size (Bytes)</th>
+                    <th class="py-2 px-4 text-left">ETag</th>
+                </tr>
+            </thead>
+            <tbody class="text-xs">
+                <% files.forEach((file, index) => { %>
+                    <tr class="text-xs hover-row <%= index % 2 === 0 ? 'bg-gray-100' : 'bg-white' %> hover:bg-gray-300 cursor-pointer" onclick="showDialog('<%= file.Key %>', '<%= new Date(file.LastModified).toLocaleString() %>', '<%= file.Size %>', '<%= file.ETag %>')">
+                        <td class="py-2 px-4 text-xs"><%= index + 1 %></td>
+                        <td class="py-2 px-4 text-xs"><%= file.Key %></td>
+                        <td class="py-2 px-4 text-xs"><%= new Date(file.LastModified).toLocaleString() %></td>
+                        <td class="py-2 px-4 text-xs"><%= file.Size %></td>
+                        <td class="py-2 px-4 text-xs"><%= file.ETag %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="dialog" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex justify-center items-center">
+        <div class="bg-white rounded-lg p-8 max-w-sm">
+            <h3 class="text-lg font-semibold mb-4">File Details</h3>
+            <p><strong>File Name:</strong> <span id="fileName"></span></p>
+            <p><strong>Last Modified:</strong> <span id="fileLastModified"></span></p>
+            <p><strong>Size (Bytes):</strong> <span id="fileSize"></span></p>
+            <p><strong>ETag:</strong> <span id="fileETag"></span></p>
+            <div class="mt-4 text-right">
+                <button onclick="closeDialog()" class="bg-blue-500 text-white px-4 py-2 rounded">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDialog(fileName, fileLastModified, fileSize, fileETag) {
+            document.getElementById('fileName').innerText = fileName;
+            document.getElementById('fileLastModified').innerText = fileLastModified;
+            document.getElementById('fileSize').innerText = fileSize;
+            document.getElementById('fileETag').innerText = fileETag;
+            document.getElementById('dialog').classList.remove('hidden');
+        }
+
+        function closeDialog() {
+            document.getElementById('dialog').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
