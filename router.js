@@ -3,12 +3,13 @@ const path = require('path');
 
 const router = express.Router();
 const fileparser = require('./fileparser');
-const { S3Client, ListObjectsV2Command, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, ListObjectsV2Command, GetObjectCommand, DeleteObjectCommand, ListObjectsCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 
 const s3Client = new S3Client({
   region: process.env.S3_REGION,
+  signatureVersion: "v4",
   credentials: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -114,7 +115,7 @@ router.route('/api/upload').post(async (req,res,next)=>{
 
 
 // Assuming this is in your Express router setup
-router.get('/api/files',fetchFilesFromS3, async (req, res, next) => {
+router.get('/api/gallery',fetchFilesFromS3, async (req, res, next) => {
   try {
       const data = await s3Client.send(new ListObjectsV2Command({ Bucket: process.env.S3_BUCKET }));
       // const dataContent = data.Contents;
@@ -125,6 +126,31 @@ router.get('/api/files',fetchFilesFromS3, async (req, res, next) => {
   }
 });
 
+
+
+router.get('/gallery', async (req, res, next) => {
+  try {
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+  };
+
+  const data = await s3Client.ListObjectsCommand(params).promise();
+  
+  const images = data.Contents.map((item) => ({
+    key: item.Key,
+    url: s3Client.getSignedUrl('getObject', {
+      Bucket: process.env.S3_BUCKET,
+      Key: item.Key,
+      Expires: 60 * 5, // URL expires in 5 minutes
+    }),
+  }));
+
+  res.render('gallery', { images });
+} catch (error) {
+  console.error('Error fetching images from S3:', error);
+  res.status(500).send('Error fetching images');
+}
+})
 
 
 

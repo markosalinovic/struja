@@ -8,39 +8,14 @@
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
   <div class="max-w-md w-full bg-white shadow-md rounded-lg p-8">
-    <h2 class="text-2xl font-semibold mb-4 text-center">File Uploaded Successfully!</h2>
-    <div id="fileDetails" class="bg-gray-100 rounded p-4 mb-4">
-      <p class="mb-2 text-xs"><strong>File Details:</strong></p>
-      <p class="mb-1 text-xs"><strong>ETag:</strong> <%= data.ETag %></p>
-      <p class="mb-1 text-xs"><strong>Server Side Encryption:</strong> <%= data.ServerSideEncryption %></p>
-      <p class="mb-1 text-xs"><strong>Version ID:</strong> <%= data.VersionId %></p>
-      <p class="mb-1 text-xs"><strong>Bucket:</strong> <%= data.Bucket %></p>
-      <p class="mb-1 text-xs"><strong>Key:</strong> <%= data.Key %></p>
-      <p class="mb-2 text-xs"><strong>Location:</strong> <a href="<%= data.Location %>" target="_blank" id="file-link" class="text-blue-500 hover:text-blue-700 underline"><%= data.Location %></a></p>
-    </div>
+    <h2 class="text-2xl font-semibold mb-4 text-center">Datoteke uspješno poslane</h2>
     
-    <div id="preview" class="grid grid-cols-1 gap-4 mb-4">
-      <!-- File previews will be added dynamically here -->
-    </div>
-    <div class="bg-white shadow-lg rounded-lg p-6 max-w-sm text-xs mb-4">
-      <img src="<%= data.Location %>" alt="Image" class="w-full h-auto rounded text-xs">
-      <div class="mt-4 flex justify-between items-center text-xs">
-          <span class="text-gray-700 text-xs"><%= data.Key %></span>
-          <a href="<%= data.Location %>" download class="text-blue-500 hover:underline text-xs">Download</a>
-      </div>
-  </div>
 
     <button onclick="location.href='/'" class="w-full bg-blue-500 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center
       bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700
       hover:from-blue-600 hover:via-blue-700 hover:to-blue-800
       focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-      Back to Home
-    </button>
-    <button onclick="location.href='/api/files'" class="mt-4 w-full bg-blue-500 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center
-      bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700
-      hover:from-blue-600 hover:via-blue-700 hover:to-blue-800
-      focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-      All Files
+      Povratak na početnu
     </button>
   </div>
 
@@ -57,7 +32,7 @@
     };
 
     document.addEventListener('DOMContentLoaded', function() {
-      const data = <%= JSON.stringify(data) %>; // Embeds the JSON string of `data`
+      const data = JSON.stringify(data); // Embeds the JSON string of `data`
       updateFileDetails(data);
       displayFilePreview(data);
 
